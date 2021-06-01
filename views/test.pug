@@ -1,0 +1,56 @@
+extends layout
+
+block content
+  div.jumbotron.my-3
+    h1.display-4 TODOアプリ
+    p.lead GitHubで認証後、タスクを作成できるようになります。
+  if user
+    h3.mt-2 新しくタスクを作成する
+    form(method="post", action="tasks/create").p-3.bg-light
+      input(type="hidden" name="_csrf" value!=csrfToken)
+      div.form-group
+        h5 タスク名(必須)
+        input(type="text" name="title" required).form-control.form-control-sm
+      div.form-group
+        h5 詳細
+        textarea(name="description").form-control.form-control-sm
+      button(type="submit").btn.btn-info.mt-2 タスクを作成する
+    h3.my-2 タスク一覧
+    - var hasTask = tasks.length > 0
+    if hasTask
+      div.row.mx-0
+        each task in tasks 
+          div.p-1.col-lg-3.col-md-4.col-sm-6
+            //- div(class = task.isDone ? "bg-success text-white" : "").card.px-0.h-100
+            div.card.px-0.h-100
+              div.card-header.d-flex.justify-content-between.mx-0
+                div.task_title(class = task.isDone ? "textdecoration_linethrough" : "") #{task.title}
+                div
+                  a(href=`/tasks/${task.taskId}`).fa-chevron-right-design.m-auto.btn.btn-light
+                    i.fas.fa-chevron-right
+                //- div
+                //-   form(action=`/tasks/update/${task.taskId}`, method="post") 
+                //-     input(type="checkbox",onChange="submit()", checked=(task.isDone))
+              div.card-body
+                p.card-text.description_height #{task.description}
+              div.card-footer.p-1
+                div.row.mx-0
+                  div.col-6.p-0
+                    form(action=`/tasks/update/${task.taskId}`, method="post")
+                      input(type="hidden" name="_csrf" value!=csrfToken)
+                      if task.isDone 
+                        button(type="submit").btn.btn-light.w-100 戻す
+                      else 
+                        button(type="submit").btn.btn-success.w-100 完了にする                        
+                  div.col-3.px-1
+                    a(href=`/tasks/edit/${task.taskId}`).btn.btn-primary.w-100
+                      i.far.fa-edit
+                  div.col-3.p-0
+                    form(action=`/tasks/delete/${task.taskId}`, method="post").task_delete_form.text-right
+                      input(type="hidden" name="_csrf" value!=csrfToken)
+                      button(type="submit").btn.btn-danger.w-100
+                        i.far.fa-trash-alt
+    else 
+      div タスクがありません
+  //- else
+  //-   a(href="/login").btn.btn-primary ログイン

@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h3 todoの編集
+  form(method="post", action=`/todos/edit/${todo.todoId}`)
+    div
+      h5 todo名
+      input(type="text" name="title" value=todo.title)
+    div
+      h5 説明
+      textarea(name="description") #{todo.description}
+    div
+      button(type="submit") 更新
