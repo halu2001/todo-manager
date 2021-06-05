@@ -36,20 +36,50 @@ passport.use(new GitHubStrategy({
   callbackURL: 'http://localhost:8000/auth/github/callback'
 },
 //認証時にユーザーIDとユーザー名を保管
-  function (accessToken, refreshToken, profile, done) {
-    process.nextTick(function () {
-      User.upsert({
+function (accessToken, refreshToken, profile, done) {
+  process.nextTick(function () {
+    User.findOne({
+      where: {
         userId: profile.id,
         username: profile.username
-      }).then(() => {
-        done(null, profile);
-      });    });
-  }
+      },
+    }).then((user
+      ) => {
+      if (user) {
+          done(null, profile);
+      }else{
+        User.upsert({
+          userId: profile.id,
+          username: profile.username,
+          totalExperiencePoints: 0,
+          nextLevelExperiencePoints: 2,
+          level: 1
+        }).then((user) => {
+          done(user, profile);
+        });
+      }
+    }) 
+  });
+}
 ));
+
+//レベルシステム不具合時はこちらに
+//   function (accessToken, refreshToken, profile, done) {
+//     process.nextTick(function () {
+//       User.upsert({
+//         userId: profile.id,
+//         username: profile.username
+//       }).then(() => {
+//         done(null, profile);
+//       });    });
+//   }
+// ));
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var logoutRouter = require('./routes/logout');
 var todoRouter = require('./routes/todos');
+var userRouter = require('./routes/user');
+
 
 var app = express();
 app.use(helmet());
@@ -72,6 +102,7 @@ app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/logout', logoutRouter);
 app.use('/todos', todoRouter);
+app.use('/user', userRouter)
 
 
 //GitHub認証を行う処理

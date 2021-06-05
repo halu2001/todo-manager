@@ -13,6 +13,18 @@ const User = loader.database.define(
     username: {
       type: Sequelize.STRING,
       allowNull: false
+    },
+    totalExperiencePoints: {
+      type: Sequelize.INTEGER,
+      allowNull: false
+    },
+    nextLevelExperiencePoints: {
+      type: Sequelize.INTEGER,
+      allowNull: false
+    },
+    level:{
+      type: Sequelize.INTEGER,
+      allowNull: false
     }
   },
   {
