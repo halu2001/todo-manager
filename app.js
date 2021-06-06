@@ -35,7 +35,8 @@ passport.deserializeUser(function (obj, done) {
 passport.use(new GitHubStrategy({
   clientID: GITHUB_CLIENT_ID,
   clientSecret: GITHUB_CLIENT_SECRET,
-  callbackURL: process.env.HEROKU_URL ? process.env.HEROKU_URL + 'auth/github/callback' : 'http://localhost:8000/auth/github/callback'
+  // callbackURL: process.env.HEROKU_URL ? process.env.HEROKU_URL + 'auth/github/callback' : 'http://localhost:8000/auth/github/callback'
+  callbackURL:'https://floating-escarpment-50575.herokuapp.com/auth/github/callback'
 },
 //認証時にユーザーIDとユーザー名を保管
   function (accessToken, refreshToken, profile, done) {
