@@ -136,11 +136,5 @@ function isMine(req, todo) {
   return todo && parseInt(todo.createdBy) === parseInt(req.user.id);
 }
 
-  //オブジェクトを保存後にリダイレクト
-  // Candidate.bulkCreate(candidates).then(() => {
-    // res.redirect('/todos/' + Todo.todoId);
-//     res.redirect("/");
-//   });
-// });
 
 module.exports = router;

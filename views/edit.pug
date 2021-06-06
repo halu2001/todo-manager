@@ -1,13 +1,13 @@
 extends layout
 
 block content
-  h3 todoの編集
+  h3.my-3 todoの編集
   form(method="post", action=`/todos/edit/${todo.todoId}`)
+    div.fome-group
+      label(for="title") todo名
+      input(type="text" name="title" value=todo.title)#title.form-control
+    div.fome-group
+      label(for="description") 説明
+      textarea(name="description")#description.form-control #{todo.description}
     div
-      h5 todo名
-      input(type="text" name="title" value=todo.title)
-    div
-      h5 説明
-      textarea(name="description") #{todo.description}
-    div
-      button(type="submit") 更新
+      button(type="submit").btn.btn-info 更新
