@@ -4,6 +4,8 @@ const router = express.Router();
 const authenticationEnsurer = require('./authentication-ensurer');
 const uuid = require('uuid');
 const Todo = require('../models/todo');
+const csrf = require('csurf');
+const csrfProtection = csrf({ cookie: true });
 
 //todo詳細リクエスト
 router.get('/:todoId', authenticationEnsurer, (req, res, next) => {
@@ -27,7 +29,7 @@ router.get('/:todoId', authenticationEnsurer, (req, res, next) => {
 
 
 //todo編集リクエスト
-router.get('/edit/:todoId', authenticationEnsurer, (req, res, next) => {
+router.get('/edit/:todoId', authenticationEnsurer,csrfProtection, (req, res, next) => {
   Todo.findOne({
     where: {
       todoId: req.params.todoId,
@@ -37,6 +39,7 @@ router.get('/edit/:todoId', authenticationEnsurer, (req, res, next) => {
       res.render('edit', { 
         todo: todo,
         user: req.user,
+        csrfToken: req.csrfToken(),
       });
     }else{
       const err = new Error("指定されたtodoは見つからないか、編集する権限がありません");
@@ -47,7 +50,7 @@ router.get('/edit/:todoId', authenticationEnsurer, (req, res, next) => {
 });
 
 //todo作成
-router.post('/new', authenticationEnsurer, (req, res, next) => {
+router.post('/new', authenticationEnsurer,csrfProtection, (req, res, next) => {
   const todoId = uuid.v4();
   const createdDate = new Date();
 
@@ -64,7 +67,7 @@ router.post('/new', authenticationEnsurer, (req, res, next) => {
 });
 
 //todo削除
-router.post('/delete/:todoId', authenticationEnsurer, (req, res, next) => {
+router.post('/delete/:todoId', authenticationEnsurer,csrfProtection, (req, res, next) => {
   Todo.findOne({
     where: {
       todoId: req.params.todoId,
@@ -84,7 +87,7 @@ router.post('/delete/:todoId', authenticationEnsurer, (req, res, next) => {
 
 
 //todo更新
-router.post('/update/:todoId', authenticationEnsurer, (req, res, next) => {
+router.post('/update/:todoId', authenticationEnsurer,csrfProtection, (req, res, next) => {
   Todo.findOne({
     where: {
       todoId: req.params.todoId,
@@ -105,7 +108,7 @@ router.post('/update/:todoId', authenticationEnsurer, (req, res, next) => {
 });
 
 //todo編集
-router.post('/edit/:todoId', authenticationEnsurer, (req, res, next) => {
+router.post('/edit/:todoId', authenticationEnsurer,csrfProtection, (req, res, next) => {
   Todo.findOne({
     where: {
       todoId: req.params.todoId,

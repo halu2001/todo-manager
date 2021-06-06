@@ -8,6 +8,7 @@ block content
       div
         h3 新しいtodoを作成
         form(method="post", action="/todos/new").my-3
+          input(type="hidden" name="_csrf" value!=csrfToken)
           div.form-group
           label(for="title") todo名
           input(type="text" name="title")#title.form-control
@@ -31,6 +32,7 @@ block content
                 td #{todo.description}
             tr
                 form(action=`/todos/update/${todo.todoId}`, method="post")
+                  input(type="hidden" name="_csrf" value!=csrfToken)
                   if todo.isFinish
                     td 
                       button(type="submit").btn.btn-secondary 戻す
@@ -39,9 +41,11 @@ block content
                       button(type="submit").btn.btn-success 完了にする
                 
                 form(action=`/todos/edit/${todo.todoId}`, method="get")
+                  input(type="hidden" name="_csrf" value!=csrfToken)
                   td 
                     button(type="submit").btn.btn-info 編集
                     
                 form(action=`/todos/delete/${todo.todoId}`, method="post")
+                  input(type="hidden" name="_csrf" value!=csrfToken)
                   td 
                     button(type="submit").btn.btn-danger 削除

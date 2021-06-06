@@ -1,0 +1,7 @@
+{
+  "name": "todo-manager",
+  "description": "todo管理アプリ",
+  "logo": "",
+  "keywords": ["node"],
+  "image": "heroku/nodejs"
+}

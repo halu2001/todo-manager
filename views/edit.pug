@@ -3,6 +3,7 @@ extends layout
 block content
   h3.my-3 todoの編集
   form(method="post", action=`/todos/edit/${todo.todoId}`)
+    input(type="hidden" name="_csrf" value!=csrfToken)
     div.fome-group
       label(for="title") todo名
       input(type="text" name="title" value=todo.title)#title.form-control

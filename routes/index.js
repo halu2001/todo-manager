@@ -2,9 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const Todo = require('../models/todo');
+const csrf = require("csurf");
+const csrfProtection = csrf({ cookie: true });
 
 /* GET home page. */
-router.get('/', (req, res, next) => {
+router.get('/', csrfProtection, (req, res, next) => {
   const title = 'todo管理アプリ';
   if (req.user) {
     Todo.findAll({
@@ -14,9 +16,9 @@ router.get('/', (req, res, next) => {
       order: [['createdDate', 'DESC']]
     }).then(todos => {
       res.render('index', {
-        title: title,
         user: req.user,
-        todos: todos
+        todos: todos,
+        csrfToken: req.csrfToken(),
       });
     });
   } else {
