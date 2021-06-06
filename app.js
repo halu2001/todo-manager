@@ -18,8 +18,10 @@ User.sync().then(() => {
 
 //GitHub認証処理
 var GitHubStrategy = require('passport-github2').Strategy;
-var GITHUB_CLIENT_ID = 'b6b0c0300faf2edfee1f';
-var GITHUB_CLIENT_SECRET = '365d18c2313bcb16e281862d523d4d8b1e271051';
+var GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || 'b6b0c0300faf2edfee1f';
+var GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || '365d18c2313bcb16e281862d523d4d8b1e271051';
+// var GITHUB_CLIENT_ID = 'b6b0c0300faf2edfee1f';
+// var GITHUB_CLIENT_SECRET = '365d18c2313bcb16e281862d523d4d8b1e271051';
 
 passport.serializeUser(function (user, done) {
   done(null, user);
@@ -33,7 +35,7 @@ passport.deserializeUser(function (obj, done) {
 passport.use(new GitHubStrategy({
   clientID: GITHUB_CLIENT_ID,
   clientSecret: GITHUB_CLIENT_SECRET,
-  callbackURL: 'http://localhost:8000/auth/github/callback'
+  callbackURL: process.env.HEROKU_URL ? process.env.HEROKU_URL + 'auth/github/callback' :'http://localhost:8000/auth/github/callback'
 },
 //認証時にユーザーIDとユーザー名を保管
   function (accessToken, refreshToken, profile, done) {
